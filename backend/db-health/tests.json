@@ -1,11 +1,11 @@
 {
   "tests": [
     {
-      "name": "Runtime check",
+      "name": "DB health check",
       "method": "GET",
       "path": "/",
       "expectedStatus": 200,
-      "expectedBody": {"cwd": "string"},
+      "expectedBody": {"db_status": "ok"},
       "bodyMatcher": "partial"
     }
   ]
