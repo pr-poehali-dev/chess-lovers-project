@@ -7,6 +7,7 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+			"./1776549706092342983.html"
 	],
 	prefix: "",
 	theme: {
@@ -85,6 +86,10 @@ export default {
 						height: '0'
 					}
 				}
+			},
+			fontFamily: {
+				cormorant: ['Cormorant', 'serif'],
+				ibm: ['IBM Plex Sans', 'sans-serif'],
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',

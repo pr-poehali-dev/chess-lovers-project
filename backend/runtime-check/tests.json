@@ -1,0 +1,12 @@
+{
+  "tests": [
+    {
+      "name": "Runtime check",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {"cwd": "string"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}
