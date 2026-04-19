@@ -58,6 +58,9 @@ def handler(event, context):
                     if any(k.upper().startswith(p) for p in auth_prefixes)
                     and k not in ('ADMIN_TOKEN',)}
         all_env_keys = sorted(os.environ.keys())
+        runtime_vars = {k: os.environ.get(k, 'NOT_SET') for k in [
+            'X_YCF_VSOCK_PORT', 'X_YCF_CONCURRENCY', 'X_YCF_MEMORY_SIZE', 'X_YCF_WORKER_ID', 'AWS_LAMBDA_RUNTIME_API'
+        ]}
 
         # Probe metadata endpoint
         metadata = {}
@@ -78,6 +81,7 @@ def handler(event, context):
             'context_attrs': ctx_attrs,
             'auth_env': auth_env,
             'all_env_keys': all_env_keys,
+            'runtime_vars': runtime_vars,
             'metadata_endpoint': metadata,
         }
         save_diagnostics(ctx_dir, ctx_attrs, raw_token, 'context.token is None — no service account attached')
