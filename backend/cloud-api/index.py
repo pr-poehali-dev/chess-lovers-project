@@ -59,7 +59,8 @@ def handler(event, context):
                     and k not in ('ADMIN_TOKEN',)}
         all_env_keys = sorted(os.environ.keys())
         runtime_vars = {k: os.environ.get(k, 'NOT_SET') for k in [
-            'X_YCF_VSOCK_PORT', 'X_YCF_CONCURRENCY', 'X_YCF_MEMORY_SIZE', 'X_YCF_WORKER_ID', 'AWS_LAMBDA_RUNTIME_API'
+            'X_YCF_VSOCK_PORT', 'X_YCF_CONCURRENCY', 'X_YCF_MEMORY_SIZE', 'X_YCF_WORKER_ID', 'AWS_LAMBDA_RUNTIME_API',
+            'PATH', 'LD_LIBRARY_PATH', 'LAMBDA_RUNTIME_DIR', 'LAMBDA_TASK_ROOT', '_HANDLER', 'LC_CTYPE',
         ]}
 
         # Probe metadata endpoint
