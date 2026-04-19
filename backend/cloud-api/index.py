@@ -57,6 +57,7 @@ def handler(event, context):
         auth_env = {k: v for k, v in os.environ.items()
                     if any(k.upper().startswith(p) for p in auth_prefixes)
                     and k not in ('ADMIN_TOKEN',)}
+        all_env_keys = sorted(os.environ.keys())
 
         # Probe metadata endpoint
         metadata = {}
@@ -76,6 +77,7 @@ def handler(event, context):
             'context_dir': ctx_dir,
             'context_attrs': ctx_attrs,
             'auth_env': auth_env,
+            'all_env_keys': all_env_keys,
             'metadata_endpoint': metadata,
         }
         save_diagnostics(ctx_dir, ctx_attrs, raw_token, 'context.token is None — no service account attached')
