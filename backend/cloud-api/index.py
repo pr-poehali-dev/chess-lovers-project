@@ -23,7 +23,8 @@ def handler(event, context):
 
     folder_id = os.environ['YC_FOLDER_ID']
 
-    sdk = yandexcloud.SDK()
+    iam_token = context.token['access_token']
+    sdk = yandexcloud.SDK(iam_token=iam_token)
     functions_service = sdk.client(FunctionServiceStub)
 
     response = functions_service.List(ListFunctionsRequest(folder_id=folder_id))
