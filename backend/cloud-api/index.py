@@ -1,6 +1,6 @@
 import json
 import os
-import yandexcloud
+import yandexcloud  # v1
 from yandex.cloud.serverless.functions.v1.function_service_pb2 import ListFunctionsRequest
 from yandex.cloud.serverless.functions.v1.function_service_pb2_grpc import FunctionServiceStub
 
