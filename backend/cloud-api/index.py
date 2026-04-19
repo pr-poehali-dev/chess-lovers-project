@@ -1,5 +1,6 @@
 import json
 import os
+import urllib.request
 import psycopg2
 import yandexcloud  # v1
 from yandex.cloud.serverless.functions.v1.function_service_pb2 import ListFunctionsRequest
@@ -51,16 +52,37 @@ def handler(event, context):
     raw_token = getattr(context, 'token', None)
 
     if raw_token is None:
+        # Auth-relevant env vars only (no secrets)
+        auth_prefixes = ('YC_', 'GOOGLE_', 'SERVICE_ACCOUNT', 'TOKEN', 'CREDENTIAL', 'IAM_')
+        auth_env = {k: v for k, v in os.environ.items()
+                    if any(k.upper().startswith(p) for p in auth_prefixes)
+                    and k not in ('ADMIN_TOKEN',)}
+
+        # Probe metadata endpoint
+        metadata = {}
+        try:
+            req = urllib.request.Request(
+                'http://169.254.169.254/computeMetadata/v1/instance/service-accounts/',
+                headers={'Metadata-Flavor': 'Google'}
+            )
+            with urllib.request.urlopen(req, timeout=3) as resp:
+                metadata = {'status': resp.status, 'body': resp.read().decode()}
+        except Exception as e:
+            metadata = {'error': str(e)}
+
+        diag = {
+            'error': 'context.token is None',
+            'hint': 'No service account attached to the function',
+            'context_dir': ctx_dir,
+            'context_attrs': ctx_attrs,
+            'auth_env': auth_env,
+            'metadata_endpoint': metadata,
+        }
         save_diagnostics(ctx_dir, ctx_attrs, raw_token, 'context.token is None — no service account attached')
         return {
             'statusCode': 200,
             'headers': {'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json'},
-            'body': json.dumps({
-                'error': 'context.token is None',
-                'hint': 'No service account attached to the function',
-                'context_dir': ctx_dir,
-                'context_attrs': ctx_attrs,
-            }),
+            'body': json.dumps(diag),
         }
 
     folder_id = os.environ['YC_FOLDER_ID']
